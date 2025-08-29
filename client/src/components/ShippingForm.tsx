@@ -49,7 +49,7 @@ const ShippingForm = ({
         </label>
         <input
           className="border-b border-gray-200 py-2 outline-none text-sm"
-          type="text"
+          type="email"
           id="email"
           placeholder="eyupkaratasbusiness@gmail.com"
           {...register("email")}
