@@ -90,6 +90,11 @@ const CartPage = () => {
   const activeStep = parseInt(searchParams.get("step") || "1");
 
   const { cart, removeFromCart } = useCartStore();
+  const subTotal = parseFloat(
+    cart.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2)
+  );
+  const discountAmount = subTotal / 10;
+  const discountedPrice = subTotal - discountAmount;
   return (
     <div className="flex flex-col gap-8 items-center justify-center mt-12">
       {/* TITLE */}
@@ -127,7 +132,10 @@ const CartPage = () => {
           {activeStep === 1 ? (
             cart.map((item) => (
               /* SINGLE CART ITEM */
-              <div className="flex items-center justify-between" key={item.id}>
+              <div
+                className="flex items-center justify-between"
+                key={item.id + item.selectedSize + item.selectedColor}
+              >
                 {/* IMAGE AND DETAILS */}
                 <div className="flex gap-8">
                   {/* IMAGE */}
@@ -181,16 +189,11 @@ const CartPage = () => {
           <div className="flex flex-col gap-4">
             <div className="flex justify-between text-sm">
               <p className=" text-gray-500">Subtotal</p>
-              <p className=" font-medium">
-                $
-                {cart
-                  .reduce((acc, item) => acc + item.price * item.quantity, 0)
-                  .toFixed(2)}
-              </p>
+              <p className=" font-medium">${subTotal}</p>
             </div>
             <div className="flex justify-between text-sm">
               <p className=" text-gray-500">Discount(10%)</p>
-              <p className=" font-medium">$ 10</p>
+              <p className=" font-medium">${discountAmount}</p>
             </div>
             <div className="flex justify-between text-sm">
               <p className=" text-gray-500">Shipping Fee</p>
@@ -199,12 +202,7 @@ const CartPage = () => {
             <hr className="border-gray-200" />
             <div className="flex justify-between ">
               <p className=" text-gray-800 font-semibold">Total</p>
-              <p className=" font-medium">
-                $
-                {cart
-                  .reduce((acc, item) => acc + item.price * item.quantity, 0)
-                  .toFixed(2)}
-              </p>
+              <p className=" font-medium">${discountedPrice.toFixed(2)}</p>
             </div>
           </div>
           {activeStep === 1 && (
